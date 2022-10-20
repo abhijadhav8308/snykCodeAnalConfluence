@@ -1,0 +1,70 @@
+{
+  "key": "${addon.key}",
+  "baseUrl": "${addon.base-url}${server.servlet.context-path}",
+  "enableLicensing": true,
+  "name": "PDF & Word Exporter for Confluence",
+  "description": "This plugin allows you to export pages to PDF and Word.",
+  "authentication": {
+    "type": "jwt"
+  },
+  "vendor": {
+    "name": "miniOrange",
+    "url": "https://www.miniorange.com"
+  },
+  "apiMigrations": {
+    "signed-install": true
+  },
+  "lifecycle": {
+    "installed": "/installed",
+    "uninstalled": "/uninstalled"
+  },
+  "modules": {
+    "configurePage": {
+      "key": "exporter-configure",
+      "url": "/exporter_configurations",
+      "name": {
+        "value": ""
+      }
+    },
+    "dialogs": [
+      {
+        "url": "/exporter-button",
+        "options": {
+          "height": "400px",
+          "width": "870px",
+          "chrome":false
+        },
+        "key": "mo-dialog-module-key"
+      }
+    ],
+    "webItems": [
+      {
+        "target": {
+          "type": "dialogmodule",
+          "options": {
+            "key": "mo-dialog-module-key"
+          }
+        },
+        "key": "miniOrange-exporter-button-action",
+        "location": "system.content.action/modify",
+        "weight": 0,
+        "context": "addon",
+        "name": {
+          "value": "miniOrange Exporter"
+        },
+        "icon": {
+          "width": 16,
+          "height": 16,
+          "url": "${server.servlet.context-path}/icons/plugin-logo.png"
+        },
+        "styleClasses": [
+          "webitem",
+          "system-present-webitem"
+        ]
+      }
+    ]
+  },
+  "scopes": [
+    "READ"
+  ]
+}
