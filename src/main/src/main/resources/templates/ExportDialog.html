@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/Preloader.css}"/>
+    <script defer th:src="@{/javascripts/Preloader.js}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aui/9.3.2/aui/aui-prototyping.min.css" media="all"
+          rel="stylesheet">
+    <script async src="https://connect-cdn.atl-paas.net/all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+    <script crossorigin="anonymous"
+            integrity="sha512-x5f5JIJHkGK/pVbCY0lF2WW3G0mGUQNqdjTdHA2oPU/EdlR8EdURuh3xB/KOBkGYYRzTMY3a5aX30t4yy6lPXQ=="
+            src="https://cdnjs.cloudflare.com/ajax/libs/aui/9.3.2/aui/aui-prototyping.js"></script>
+    <!--/*@thymesVar id="atlassianConnectToken" type="token"*/-->
+    <meta name="token" th:content="${atlassianConnectToken}"/>
+    <script defer th:src="@{/javascripts/ExportDialog.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/ExportLoader.css}"/>
+
+</head>
+
+<body style="background:#fff!important">
+<input type="hidden" id="moContextPath" th:value="${moContextPath}">
+<div id="exporter-dialog" style="overflow:visible !important;">
+    <div>
+        <div>
+            <button class="cross" id="mo-close-button"><img src="icons/close_button.png" style="width: 25px;">
+            </button>
+        </div>
+        <div>
+            <section class="aui-dialog2" id="static-dialog1" role="dialog">
+                <div>
+                    <div class="opt-box" style="margin-top: -27px;margin-bottom: 40px;">
+                        <span style="font-family:'Roboto',serif !important;">Select format :</span>
+                    </div>
+                    <div style="display: flex;flex-direction: column;gap: 10px;align-items: center;margin-top: 10px;">
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input checked class="chkbox-input formatcheckbox" id="PDFFormat"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="PDFFormat"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img alt="PDF" src="icons/mini-pdf-icon.png"
+                                                     style="width: 3.5rem; height: 3.5rem;">
+                                            </span>
+                                        <!--                                            <span class="chkbox-label">PDF</span>-->
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input class="chkbox-input formatcheckbox" id="WordFormat"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="WordFormat"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img alt="WORD"
+                                                     src="icons/mini-word-icon.png"
+                                                     style="width: 3.5rem; height: 3.5rem;">
+                                            </span>
+                                        <!--                                            <span class="chkbox-label">WORD</span>-->
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <br/>
+                <button class='button hovertext' id='export-button' th:disabled="${!isLicenseActive}" data-hover="License not found" >Export</button>
+
+            </section>
+            <section class="aui-dialog2" id="static-dialog2" role="dialog"
+                     style="display: flex;justify-content: center;align-items: center;">
+                <div class="opt-box" style="width: 75%; margin-left: -25px;margin-top: -35px;">
+                    <label class="panel-title">Choose Fields :</label>
+                    <div class="daddy panel-content2">
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input checked class="chkbox-input formatcheckbox" id="pageTitle"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="pageTitle"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img src="icons/Page-title.png">
+                                            </span>
+                                            <span class="chkbox-label">Page Title</span>
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input checked class="chkbox-input formatcheckbox" id="creator"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="creator"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img src="icons/creator-icon.svg">
+                                            </span>
+                                            <span class="chkbox-label">Creator</span>
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input checked class="chkbox-input formatcheckbox" id="attachments"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="attachments"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img src="icons/attachment-icon.png">
+                                            </span>
+                                            <span class="chkbox-label">Attachments</span>
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input class="chkbox-input formatcheckbox" id="comments"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="comments"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img src="icons/comment_icon.svg">
+                                            </span>
+                                            <span class="chkbox-label">Comments</span>
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input class="chkbox-input formatcheckbox" id="pageEbdLinks"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="pageEbdLinks"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img src="icons/page-ebdlinks.png">
+                                            </span>
+                                            <span class="chkbox-label">+Links</span>
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <section class="aui-dialog2" id="static-dialog3" role="dialog">
+                <!--   Div close for Grid -->
+                <div class="opt-box">
+                    <label class="panel-title" style="margin: -25px auto 20px; ">Select Template :</label>
+                    <div class="daddy panel-content" style="margin-left: -25px;">
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input checked class="chkbox-input formatcheckbox" id="defaultPageLayout"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="defaultPageLayout"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img src="icons/defaultPageLayout.png">
+                                            </span>
+                                            <span class="chkbox-label">Default</span>
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input class="chkbox-input formatcheckbox" id="documentationTemplate"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="documentationTemplate"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img src="icons/documentationTemplate.png">
+                                            </span>
+                                            <span class="chkbox-label">Document</span>
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="aui-dialog2" id="static-dialog4" role="dialog">
+                <div class="opt-box">
+                    <input class="panel" id="scopeRow" type="checkbox">
+                    <label class="panel-title" for="scopeRow" style="margin: -25px auto 20px; ">Select Scope :</label>
+                    <div class="daddy panel-content" style=" margin-left: -25px;">
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input checked class="chkbox-input formatcheckbox" id="singlePage"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="singlePage"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img src="icons/single-page.svg">
+                                            </span>
+                                            <span class="chkbox-label">Current Page</span>
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="chkbox-group">
+                            <div class="chkbox">
+                                <label class="chkbox-wrapper">
+                                    <input class="chkbox-input formatcheckbox" id="pageChildren"
+                                           name="formatcheckbox"
+                                           type="checkbox" value="pageChildren"/>
+                                    <span class="chkbox-tile">
+                                            <span class="chkbox-icon">
+                                                <img src="icons/page-children.png">
+                                            </span>
+                                            <span class="chkbox-label">Child Pages</span>
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div id="exporter-loading"
+     style="display: none;    flex-direction: column-reverse;justify-content: center;align-content: center;">
+    <div style="margin: 0 auto;">
+        <button id="mo-close-button-2">CANCEL</button>
+    </div>
+    <div style="display: flex;align-items: center; justify-content: center;flex-direction: column;margin-top: 60px;width:100%;">
+        <p>Preparing your Document...</p>
+        <div id="loader"></div>
+        <!--<svg fill="#0052CC" height="80px" version="1.1" viewBox="0 0 200 200" width="80px"
+             xmlns="http://www.w3.org/2000/svg">
+             </svg>-->
+
+        <g class="pre load5" fill="#0052CC">
+            <path d="m124.5 57c0 3.9-3.1 7-7 7h-36c-3.9 0-7-3.1-7-7s3.1-7 7-7h36c3.9 0 7 3.1 7 7z"></path>
+            <path
+                    d="m147.7 86.9c-2.7 2.7-7.2 2.7-9.9 0l-25.5-25.5c-2.7-2.7-2.7-7.2 0-9.9s7.2-2.7 9.9 0l25.5 25.5c2.8 2.8 2.8 7.2 0 9.9z"></path>
+            <path d="m143 74.5c3.9 0 7 3.1 7 7v36c0 3.9-3.1 7-7 7s-7-3.1-7-7v-36c0-3.9 3.1-7 7-7z"></path>
+            <path
+                    d="m148.4 112.4c2.7 2.7 2.7 7.2 0 9.9l-25.4 25.4c-2.7 2.7-7.2 2.7-9.9 0s-2.7-7.2 0-9.9l25.5-25.5c2.7-2.7 7.1-2.7 9.8 0.1z"></path>
+            <path d="m125.5 143c0 3.9-3.1 7-7 7h-36c-3.9 0-7-3.1-7-7s3.1-7 7-7h36c3.9 0 7 3.1 7 7z"></path>
+            <path
+                    d="m52.3 113.1c2.7-2.7 7.2-2.7 9.9 0l25.5 25.5c2.7 2.7 2.7 7.2 0 9.9s-7.2 2.7-9.9 0l-25.5-25.5c-2.8-2.8-2.8-7.2 0-9.9z"></path>
+            <path d="m57 75.5c3.9 0 7 3.1 7 7v36c0 3.9-3.1 7-7 7s-7-3.1-7-7v-36c0-3.9 3.1-7 7-7z"></path>
+            <path
+                    d="m86.9 52.3c2.7 2.7 2.7 7.2 0 9.9l-25.4 25.4c-2.7 2.7-7.2 2.7-9.9 0s-2.7-7.2 0-9.9l25.4-25.4c2.8-2.8 7.2-2.8 9.9 0z"></path>
+        </g>
+    </div>
+
+
+</div>
+</body>
+
+</html>
