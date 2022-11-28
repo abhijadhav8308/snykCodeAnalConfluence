@@ -15,7 +15,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <atlassian-connect-spring-boot.version>2.3.6</atlassian-connect-spring-boot.version>
+        <atlassian-connect-spring-boot.version>3.0.0</atlassian-connect-spring-boot.version>
     </properties>
 
     <dependencies>
